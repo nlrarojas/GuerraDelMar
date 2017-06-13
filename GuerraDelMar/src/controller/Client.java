@@ -82,6 +82,11 @@ public class Client extends Thread implements IConstants{
                         temporalConversation += userList[i] + "\n";
                     }
                     status = temporalConversation;
+                }else if(instruction.equals(USER_OFF)){
+                    enviar.println(instruction);
+                    enviar.println(parameter);
+                    
+                    status = recibir.readLine();
                 }else {
                     enviar.println();                   
                 }

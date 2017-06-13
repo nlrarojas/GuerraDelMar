@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
 import controller.Client;
@@ -20,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import static util.IConstants.IP_SERVER_LOCAL;
 import static util.IConstants.SEND_MESSAGE;
 import static util.IConstants.SERVER_PORT;
+import static util.IConstants.UPDATE_CONVERSATION;
 
 /**
  *
@@ -68,7 +64,15 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
                 jTxtA_Conversation.setText(status);
             }
         });
-        getIpv4Available();        
+        getIpv4Available();
+
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                myClient = new Client(SERVER_PORT, IP_SERVER_LOCAL, USER_OFF, userName);
+                myClient.start();
+            }
+        });
     }
 
     public void getIpv4Available() {

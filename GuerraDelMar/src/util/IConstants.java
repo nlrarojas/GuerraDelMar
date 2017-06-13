@@ -12,6 +12,7 @@ public interface IConstants {
     public static String GET_USERS = "obtenerUsuarios";
     public static String SEND_MESSAGE = "enviarMensaje";
     public static String UPDATE_CONVERSATION = "actualizarConversacion";
+    public static String USER_OFF = "eliminarUsuario";
     
     public static String ACEPTADO = "aceptado";
     public static String RECHAZADO = "rechazado";
