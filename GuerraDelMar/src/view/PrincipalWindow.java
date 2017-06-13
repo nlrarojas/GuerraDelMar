@@ -5,22 +5,41 @@
  */
 package view;
 
-import java.awt.Point;
+import controller.Client;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import util.IConstants;
 import javax.swing.JOptionPane;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
+import static util.IConstants.IP_SERVER_LOCAL;
+import static util.IConstants.SEND_MESSAGE;
+import static util.IConstants.SERVER_PORT;
 
 /**
  *
  * @author Nelson
  */
-public class PrincipalWindow extends javax.swing.JFrame {
+public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
 
     private String ipSelected;
+    private Client myClient;    
+    private Timer timer;
+    
+    public static String userName;
+    
+    public String getIpSelected() {
+        return ipSelected;
+    }
+
+    public void setIpSelected(String ipSelected) {
+        this.ipSelected = ipSelected;
+    }
     
     /**
      * Creates new form PrincipalWindow
@@ -34,7 +53,22 @@ public class PrincipalWindow extends javax.swing.JFrame {
         this.setVisible(true);
         this.setLocationRelativeTo(null);
         JP_Start.setVisible(false);
-        JP_Ipv4Available.setVisible(false);
+        JP_Login.setVisible(false);        
+        
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                myClient = new Client(SERVER_PORT, IP_SERVER_LOCAL, UPDATE_CONVERSATION, null);
+                myClient.start();
+
+                String status = myClient.getStatus();
+                while (status.equals("")) {
+                    status = myClient.getStatus();
+                }
+                jTxtA_Conversation.setText(status);
+            }
+        });
+        getIpv4Available();        
     }
 
     public void getIpv4Available() {
@@ -72,6 +106,13 @@ public class PrincipalWindow extends javax.swing.JFrame {
 
         jDesktopPane1 = new javax.swing.JDesktopPane();
         JP_Start = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        JTable_Users = new javax.swing.JTable();
+        JBtn_invite = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTxtA_Conversation = new javax.swing.JTextArea();
+        jTxtF_Message = new javax.swing.JTextField();
+        JBtn_SendMessage = new javax.swing.JButton();
         JP_Ipv4Available = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         JTable_IP = new javax.swing.JTable();
@@ -84,21 +125,80 @@ public class PrincipalWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Guerra del mar");
-        setPreferredSize(new java.awt.Dimension(800, 600));
         setSize(new java.awt.Dimension(800, 600));
 
         JP_Start.setBackground(new java.awt.Color(255, 255, 255));
         JP_Start.setPreferredSize(new java.awt.Dimension(800, 600));
 
+        JTable_Users.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null},
+                {null},
+                {null},
+                {null}
+            },
+            new String [] {
+                "Nombre de ususario"
+            }
+        ));
+        jScrollPane2.setViewportView(JTable_Users);
+
+        JBtn_invite.setText("Invitar");
+        JBtn_invite.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBtn_inviteActionPerformed(evt);
+            }
+        });
+
+        jTxtA_Conversation.setEditable(false);
+        jTxtA_Conversation.setColumns(20);
+        jTxtA_Conversation.setRows(5);
+        jTxtA_Conversation.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jScrollPane3.setViewportView(jTxtA_Conversation);
+
+        jTxtF_Message.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        JBtn_SendMessage.setText("Enviar");
+        JBtn_SendMessage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBtn_SendMessageActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout JP_StartLayout = new javax.swing.GroupLayout(JP_Start);
         JP_Start.setLayout(JP_StartLayout);
         JP_StartLayout.setHorizontalGroup(
             JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addGroup(JP_StartLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(JBtn_invite)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JP_StartLayout.createSequentialGroup()
+                .addContainerGap(33, Short.MAX_VALUE)
+                .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(JP_StartLayout.createSequentialGroup()
+                        .addComponent(jTxtF_Message, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(JBtn_SendMessage)))
+                .addGap(425, 425, 425))
         );
         JP_StartLayout.setVerticalGroup(
             JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 600, Short.MAX_VALUE)
+            .addGroup(JP_StartLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JBtn_invite)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 252, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTxtF_Message, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JBtn_SendMessage))
+                .addGap(55, 55, 55))
         );
 
         jDesktopPane1.add(JP_Start);
@@ -142,7 +242,7 @@ public class PrincipalWindow extends javax.swing.JFrame {
         JP_Ipv4Available.add(jButton1);
         jButton1.setBounds(340, 300, 120, 25);
 
-        jLabel2.setText("Seleccione la direcció IP del servidor");
+        jLabel2.setText("Seleccione la dirección IP del servidor");
         jLabel2.setPreferredSize(new java.awt.Dimension(250, 20));
         JP_Ipv4Available.add(jLabel2);
         jLabel2.setBounds(275, 40, 250, 20);
@@ -209,37 +309,112 @@ public class PrincipalWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_Jtf_loginActionPerformed
 
     private void JBtn_LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBtn_LoginActionPerformed
-        validateLogin();
+        if(validateLogin()){
+            myClient = new Client(SERVER_PORT, IP_SERVER_LOCAL, GET_USERS, null);
+            myClient.start();
+            
+            String status = myClient.getStatus();
+            while(status.equals("")){
+                status = myClient.getStatus();
+            }
+            if(myClient.getStatus().equals(ACEPTADO)){
+                String[] columnNames = {"Nombre de usuario"};
+                String [] userList = myClient.getUserList();
+                String [][] data = new String [userList.length][1];
+                System.out.println(data[0].length);
+                System.out.println(data.length);
+                
+                for (int i = 0; i < userList.length; i++) {
+                    data[i][0] = userList[i];
+                }
+                
+                DefaultTableModel model = new DefaultTableModel(data, columnNames);
+                JTable_Users.setModel(model);
+            }
+            timer.start();
+        }
     }//GEN-LAST:event_JBtn_LoginActionPerformed
 
     private boolean validateLogin(){
-        if (!Jtf_login.getText().isEmpty()) {
-            //consultarle al servidor si es nombre único
-            JP_Login.setVisible(false); 
-            getIpv4Available();
-            JP_Ipv4Available.setVisible(true);
-            return true;
+        if (!Jtf_login.getText().isEmpty()) {    
+            userName = Jtf_login.getText();
+            myClient = new Client(SERVER_PORT, IP_SERVER_LOCAL, VALIDATE_USER, userName);
+            myClient.start();
+            String status = myClient.getStatus();
+            while(status.equals("")){
+                status = myClient.getStatus();
+            }
+            if(myClient.getStatus().equals(ACEPTADO)){
+                JP_Login.setVisible(false);
+                JP_Start.setVisible(true);
+                return true;
+            }else{
+                JOptionPane.showMessageDialog(null, "El nombre de usuario ya existe");
+                return false;
+            }
         } else {
-            JOptionPane.showMessageDialog(null, "Ingrese el nombre de usuario");
-            return false;
+            JOptionPane.showMessageDialog(null, "Ingrese el nombre de usuario");            
         }
+        return false;
     }
     
     private void Jtf_loginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Jtf_loginKeyPressed
         if(evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER){
-            validateLogin();
+            if(validateLogin()){
+                myClient = new Client(SERVER_PORT, IP_SERVER_LOCAL, GET_USERS, null);
+                myClient.start();
+
+                String status = myClient.getStatus();
+                while(status.equals("")){
+                    status = myClient.getStatus();
+                }
+                if(myClient.getStatus().equals(ACEPTADO)){
+                    String[] columnNames = {"Nombre de usuario"};
+                    String [] userList = myClient.getUserList();
+                    String [][] data = new String [userList.length][1];
+                    System.out.println(data[0].length);
+                    System.out.println(data.length);
+
+                    for (int i = 0; i < userList.length; i++) {
+                        data[i][0] = userList[i];
+                    }
+
+                    DefaultTableModel model = new DefaultTableModel(data, columnNames);
+                    JTable_Users.setModel(model);
+                }
+            }
         }
     }//GEN-LAST:event_Jtf_loginKeyPressed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if(JTable_IP.getSelectedRow() != -1){
-            ipSelected = JTable_IP.getModel().getValueAt(JTable_IP.getSelectedRow(), JTable_IP.getSelectedColumn()).toString();
-            JP_Ipv4Available.setVisible(false);
-            JP_Start.setVisible(true);
+            ipSelected = JTable_IP.getModel().getValueAt(JTable_IP.getSelectedRow(), JTable_IP.getSelectedColumn()).toString();                        
         }else{
-            JOptionPane.showMessageDialog(null, "Seleccione la dirección ip del servidor");
+            JOptionPane.showMessageDialog(null, "Servidor local seleccionado");
+            ipSelected = IP_SERVER_LOCAL;
         }
+        JP_Ipv4Available.setVisible(false);
+        JP_Login.setVisible(true);
+        
+        myClient = new Client(SERVER_PORT, IP_SERVER_LOCAL);
+        myClient.start();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void JBtn_inviteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBtn_inviteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JBtn_inviteActionPerformed
+
+    private void JBtn_SendMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBtn_SendMessageActionPerformed
+        myClient = new Client(SERVER_PORT, IP_SERVER_LOCAL, SEND_MESSAGE, userName + "-> " + jTxtF_Message.getText());
+        myClient.start();
+        
+        String status = myClient.getStatus();
+        while(status.equals("")){
+            status = myClient.getStatus();
+        }
+        jTxtA_Conversation.setText(status);
+        jTxtF_Message.setText("");
+    }//GEN-LAST:event_JBtn_SendMessageActionPerformed
 
 //    /**
 //     * @param args the command line arguments
@@ -278,15 +453,22 @@ public class PrincipalWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBtn_Login;
+    private javax.swing.JButton JBtn_SendMessage;
+    private javax.swing.JButton JBtn_invite;
     private javax.swing.JPanel JP_Ipv4Available;
     private javax.swing.JPanel JP_Login;
     private javax.swing.JPanel JP_Start;
     private javax.swing.JTable JTable_IP;
+    private javax.swing.JTable JTable_Users;
     private javax.swing.JTextField Jtf_login;
     private javax.swing.JButton jButton1;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextArea jTxtA_Conversation;
+    private javax.swing.JTextField jTxtF_Message;
     // End of variables declaration//GEN-END:variables
 }
