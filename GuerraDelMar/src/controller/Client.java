@@ -87,6 +87,7 @@ public class Client extends Thread implements IConstants{
                     enviar.println(parameter);
                     
                     status = recibir.readLine();
+                    System.out.println(status);
                 }else {
                     enviar.println();                   
                 }

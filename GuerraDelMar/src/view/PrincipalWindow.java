@@ -12,6 +12,7 @@ import java.net.SocketException;
 import java.util.Enumeration;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
+import model.Boton;
 import static util.IConstants.IP_SERVER_LOCAL;
 import static util.IConstants.SEND_MESSAGE;
 import static util.IConstants.SERVER_PORT;
@@ -28,6 +29,10 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
     private Timer timer;
     
     public static String userName;
+    
+    int fila = 15;
+    int columna = 15;
+    Boton [][] panelBotones = new Boton[fila][columna];
     
     public String getIpSelected() {
         return ipSelected;
@@ -49,7 +54,11 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
         this.setVisible(true);
         this.setLocationRelativeTo(null);
         JP_Start.setVisible(false);
-        JP_Login.setVisible(false);        
+        JP_Login.setVisible(false);    
+        
+        botones();
+        
+        jPanel1.setOpaque(false);
         
         timer = new Timer(1000, new ActionListener() {
             @Override
@@ -117,6 +126,15 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
         jTxtA_Conversation = new javax.swing.JTextArea();
         jTxtF_Message = new javax.swing.JTextField();
         JBtn_SendMessage = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         JP_Ipv4Available = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         JTable_IP = new javax.swing.JTable();
@@ -161,6 +179,11 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
         jScrollPane3.setViewportView(jTxtA_Conversation);
 
         jTxtF_Message.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jTxtF_Message.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTxtF_MessageKeyPressed(evt);
+            }
+        });
 
         JBtn_SendMessage.setText("Enviar");
         JBtn_SendMessage.addActionListener(new java.awt.event.ActionListener() {
@@ -169,40 +192,131 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
             }
         });
 
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 353, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 354, Short.MAX_VALUE)
+        );
+
+        jButton2.setText("Fuente Energia");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Mercado");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Mina");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("Armería");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setText("Templo");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        jButton7.setText("Conector");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        jButton8.setText("Insertar");
+
         javax.swing.GroupLayout JP_StartLayout = new javax.swing.GroupLayout(JP_Start);
         JP_Start.setLayout(JP_StartLayout);
         JP_StartLayout.setHorizontalGroup(
             JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JP_StartLayout.createSequentialGroup()
+                .addContainerGap(43, Short.MAX_VALUE)
+                .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JP_StartLayout.createSequentialGroup()
+                        .addComponent(jTxtF_Message, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(JBtn_SendMessage)))
+                .addGap(61, 61, 61)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(JBtn_invite)
+                .addGap(76, 76, 76))
             .addGroup(JP_StartLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(JBtn_invite)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JP_StartLayout.createSequentialGroup()
-                .addContainerGap(33, Short.MAX_VALUE)
-                .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(JP_StartLayout.createSequentialGroup()
-                        .addComponent(jTxtF_Message, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(JBtn_SendMessage)))
-                .addGap(425, 425, 425))
+                        .addComponent(jButton2)
+                        .addGap(18, 18, 18)
+                        .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         JP_StartLayout.setVerticalGroup(
             JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(JP_StartLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(JBtn_invite)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 252, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JP_StartLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTabbedPane1)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTxtF_Message, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JBtn_SendMessage))
-                .addGap(55, 55, 55))
+                    .addComponent(jButton2)
+                    .addComponent(jButton3)
+                    .addComponent(jButton4)
+                    .addComponent(jButton5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton7)
+                        .addComponent(jButton8))
+                    .addComponent(jButton6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JBtn_invite)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(JP_StartLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(JBtn_SendMessage)
+                            .addComponent(jTxtF_Message, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
         );
 
         jDesktopPane1.add(JP_Start);
@@ -409,6 +523,40 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
     }//GEN-LAST:event_JBtn_inviteActionPerformed
 
     private void JBtn_SendMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBtn_SendMessageActionPerformed
+        sendMessage();
+    }//GEN-LAST:event_JBtn_SendMessageActionPerformed
+
+    private void jTxtF_MessageKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTxtF_MessageKeyPressed
+        if(evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER){
+            sendMessage();
+        }
+    }//GEN-LAST:event_jTxtF_MessageKeyPressed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        crearFabrica("FuenteEnergia");
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        crearFabrica("Mercado");
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        crearFabrica("Mina");
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        crearFabrica("Armeria");
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        crearFabrica("Templo");
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        crearConector();
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void sendMessage(){
         myClient = new Client(SERVER_PORT, IP_SERVER_LOCAL, SEND_MESSAGE, userName + "-> " + jTxtF_Message.getText());
         myClient.start();
         
@@ -418,8 +566,25 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
         }
         jTxtA_Conversation.setText(status);
         jTxtF_Message.setText("");
-    }//GEN-LAST:event_JBtn_SendMessageActionPerformed
-
+    }
+    
+    private void botones(){
+        for (int i = 0; i<fila; i++){
+            for (int j = 0; j<columna; j++){
+                panelBotones[i][j] = new Boton(23 * i, 23 * j, 23, 23);
+                jPanel1.add(panelBotones[i][j]);
+            }
+        }
+    }
+    
+    public void crearFabrica(String tipo){
+        
+    }
+    
+    public void crearConector(){
+        
+    }
+    
 //    /**
 //     * @param args the command line arguments
 //     */
@@ -466,12 +631,21 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
     private javax.swing.JTable JTable_Users;
     private javax.swing.JTextField Jtf_login;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextArea jTxtA_Conversation;
     private javax.swing.JTextField jTxtF_Message;
     // End of variables declaration//GEN-END:variables
