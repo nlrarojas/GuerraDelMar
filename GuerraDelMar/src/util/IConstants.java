@@ -16,4 +16,6 @@ public interface IConstants {
     
     public static String ACEPTADO = "aceptado";
     public static String RECHAZADO = "rechazado";
+    
+    public static String CHANGE_READY = "cambiarStatus";
 }

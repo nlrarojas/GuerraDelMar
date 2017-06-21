@@ -1,8 +1,8 @@
 package view;
 
 import controller.Client;
+import controller.ThreadController;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 import util.IConstants;
 import javax.swing.JOptionPane;
 import java.net.Inet4Address;
@@ -10,11 +10,11 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 import model.Boton;
+import model.Player;
 import static util.IConstants.IP_SERVER_LOCAL;
 import static util.IConstants.SEND_MESSAGE;
 import static util.IConstants.SERVER_PORT;
@@ -29,12 +29,15 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
     private String ipSelected;
     private Client myClient;    
     private Timer timer;
+    private Player player;
+    private ThreadController controller;
     
     public static String userName;
-    
-    int fila = 15;
-    int columna = 15;
-    Boton [][] panelBotones = new Boton[fila][columna];
+    private JPanel [] rivalsPanels = new JPanel[3];
+    private int rivalsPanelsSize = 0;
+    private int fila = 15;
+    private int columna = 15;
+    private Boton [][] panelBotones = new Boton[fila][columna];
     
     public String getIpSelected() {
         return ipSelected;
@@ -59,11 +62,13 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
         JP_Login.setVisible(false);    
         
         botones();
+        player = new Player("");
+        controller = new ThreadController();
         
         jPanel1.setOpaque(false);
         
         timer = new Timer(1000, (ActionEvent e) -> {
-            myClient = new Client(SERVER_PORT, ipSelected, UPDATE_CONVERSATION, null);
+            myClient = new Client(SERVER_PORT, ipSelected, UPDATE_CONVERSATION, "");
             myClient.start();
             
             String status;
@@ -75,7 +80,7 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                myClient = new Client(SERVER_PORT, IP_SERVER_LOCAL, USER_OFF, userName);
+                myClient = new Client(SERVER_PORT, ipSelected, USER_OFF, userName);
                 myClient.start();
             }
         });
@@ -132,6 +137,8 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
+        jButton9 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
         JP_Ipv4Available = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         JTable_IP = new javax.swing.JTable();
@@ -244,12 +251,26 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
 
         jButton8.setText("Insertar");
 
+        jButton9.setText("Iniciar");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
+        jButton10.setText("Mercado");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout JP_StartLayout = new javax.swing.GroupLayout(JP_Start);
         JP_Start.setLayout(JP_StartLayout);
         JP_StartLayout.setHorizontalGroup(
             JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JP_StartLayout.createSequentialGroup()
-                .addContainerGap(33, Short.MAX_VALUE)
+                .addContainerGap(47, Short.MAX_VALUE)
                 .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JP_StartLayout.createSequentialGroup()
@@ -259,8 +280,11 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
                 .addGap(61, 61, 61)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(34, 34, 34)
-                .addComponent(JBtn_invite)
-                .addGap(76, 76, 76))
+                .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(JBtn_invite, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(54, 54, 54))
             .addGroup(JP_StartLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -281,17 +305,18 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
                     .addGroup(JP_StartLayout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(33, 33, 33)
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         JP_StartLayout.setVerticalGroup(
             JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JP_StartLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addGroup(JP_StartLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton3)
@@ -305,7 +330,12 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
                         .addComponent(jButton8)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(JBtn_invite)
+                    .addGroup(JP_StartLayout.createSequentialGroup()
+                        .addComponent(JBtn_invite)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton9)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton10))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(JP_StartLayout.createSequentialGroup()
                         .addGap(12, 12, 12)
@@ -426,7 +456,7 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
 
     private void JBtn_LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBtn_LoginActionPerformed
         if(validateLogin()){
-            myClient = new Client(SERVER_PORT, IP_SERVER_LOCAL, GET_USERS, null);
+            myClient = new Client(SERVER_PORT, IP_SERVER_LOCAL, GET_USERS, "");
             myClient.start();
             
             String status = myClient.getStatus();
@@ -446,12 +476,14 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
                 JTable_Users.setModel(model);
             }
             //timer.start();
+            controller.start();
         }
     }//GEN-LAST:event_JBtn_LoginActionPerformed
 
     private boolean validateLogin(){
         if (!Jtf_login.getText().isEmpty()) {    
             userName = Jtf_login.getText();
+            player.setUserName(userName);
             myClient = new Client(SERVER_PORT, ipSelected, VALIDATE_USER, userName);
             myClient.start();
             String status = myClient.getStatus();
@@ -475,7 +507,7 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
     private void Jtf_loginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Jtf_loginKeyPressed
         if(evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER){
             if(validateLogin()){
-                myClient = new Client(SERVER_PORT, IP_SERVER_LOCAL, GET_USERS, null);
+                myClient = new Client(SERVER_PORT, ipSelected, GET_USERS, "");
                 myClient.start();
 
                 String status = myClient.getStatus();
@@ -486,8 +518,6 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
                     String[] columnNames = {"Nombre de usuario"};
                     String [] userList = myClient.getUserList();
                     String [][] data = new String [userList.length][1];
-                    System.out.println(data[0].length);
-                    System.out.println(data.length);
 
                     for (int i = 0; i < userList.length; i++) {
                         data[i][0] = userList[i];
@@ -498,6 +528,7 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
                 }
             }
             //timer.start();
+            controller.start();
         }
     }//GEN-LAST:event_Jtf_loginKeyPressed
 
@@ -516,7 +547,11 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void JBtn_inviteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBtn_inviteActionPerformed
-        // TODO add your handling code here:
+        if(JTable_Users.getSelectedRow() != -1){
+            generateRivalWorld();
+        }else{
+            JOptionPane.showMessageDialog(null, "Seleccione un jugador para invitar a la partida");
+        }
     }//GEN-LAST:event_JBtn_inviteActionPerformed
 
     private void JBtn_SendMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBtn_SendMessageActionPerformed
@@ -553,8 +588,21 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
         crearConector();
     }//GEN-LAST:event_jButton7ActionPerformed
 
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        player.setReady(true);
+        jButton9.setEnabled(false);
+        Client cliente = new Client(SERVER_PORT, ipSelected, CHANGE_READY, player);
+        cliente.start();
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        MarketView mercado = new MarketView(player.getMoney());
+        mercado.setVisible(true);
+        mercado.setLocationRelativeTo(null);
+    }//GEN-LAST:event_jButton10ActionPerformed
+
     private void sendMessage(){
-        myClient = new Client(SERVER_PORT, IP_SERVER_LOCAL, SEND_MESSAGE, userName + "-> " + jTxtF_Message.getText());
+        myClient = new Client(SERVER_PORT, ipSelected, SEND_MESSAGE, userName + "-> " + jTxtF_Message.getText());
         myClient.start();
         
         String status = myClient.getStatus();
@@ -571,7 +619,7 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
                 panelBotones[i][j] = new Boton(23 * i, 23 * j, 23, 23);
                 jPanel1.add(panelBotones[i][j]);
             }
-        }
+        }                
     }
     
     public void crearFabrica(String tipo){
@@ -628,6 +676,7 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
     private javax.swing.JTable JTable_Users;
     private javax.swing.JTextField Jtf_login;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -635,6 +684,7 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -646,4 +696,31 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
     private javax.swing.JTextArea jTxtA_Conversation;
     private javax.swing.JTextField jTxtF_Message;
     // End of variables declaration//GEN-END:variables
+
+    private void generateRivalWorld() {
+        System.out.println(rivalsPanels.length);
+        if(rivalsPanelsSize < 3){
+            Boton[][] panelBotones = new Boton[fila][columna];            
+            JPanel newPanel = new JPanel();
+            newPanel.setLayout(null);
+            for (int i = 0; i < fila; i++){
+                for (int j = 0; j < columna; j++){
+                    panelBotones[i][j] = new Boton(23 * i, 23 * j, 23, 23);
+                    newPanel.add(panelBotones[i][j]);
+                }
+            }
+                        
+            String rivalUserName = JTable_Users.getModel().getValueAt(JTable_Users.getSelectedRow(), JTable_Users.getSelectedColumn()).toString();
+            for (int i = 0; i < jTabbedPane1.getTabCount(); i++) {
+                if(jTabbedPane1.getTitleAt(i).equals("Jugador " + rivalUserName)){
+                    JOptionPane.showMessageDialog(null, "Este rival ya se encuentra en la partida");
+                    return;
+                }
+            }
+            rivalsPanelsSize++;
+            jTabbedPane1.addTab("Jugador " + rivalUserName, newPanel);            
+        }else{
+            JOptionPane.showMessageDialog(null, "Solo se puede tener una partida con 3 rivales");
+        }
+    }
 }

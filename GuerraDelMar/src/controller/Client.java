@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Player;
 import util.IConstants;
 
 /**
@@ -24,7 +25,8 @@ public class Client extends Thread implements IConstants {
     private ObjectInputStream recibir;
     private String serverResponse;
     private String[] userList;
-
+    private Player player;
+    
     public Client(int pPort, String pIpServer) {
         super("Cliente guerra del mar");
         this.port = pPort;
@@ -42,6 +44,15 @@ public class Client extends Thread implements IConstants {
         this.instruction = pInstruction;
         this.parameter = pUserName;
         this.status = "";
+    }
+
+    public Client(int pPort, String pIpServer, String pInstruction, Player pPlayer) {
+        super("Cliente guerra del mar");
+        this.port = pPort;
+        this.ipServer = pIpServer;
+        this.instruction = pInstruction;
+        this.status = "";
+        this.player = pPlayer;
     }
 
     @Override
@@ -82,6 +93,11 @@ public class Client extends Thread implements IConstants {
 
                     status = recibir.readUnshared().toString();
                     System.out.println(status);
+                } else if(instruction.equals(CHANGE_READY)){
+                    enviar.writeUnshared(CHANGE_READY);
+                    enviar.writeUnshared(player);
+                    
+                    status = recibir.readUnshared().toString();
                 } else {
                     enviar.writeUnshared("");
                 }
