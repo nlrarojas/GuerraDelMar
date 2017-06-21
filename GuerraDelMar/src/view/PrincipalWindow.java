@@ -1,6 +1,7 @@
 package view;
 
 import controller.Client;
+import controller.Generator;
 import controller.ThreadController;
 import java.awt.event.ActionEvent;
 import util.IConstants;
@@ -31,6 +32,7 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
     private Timer timer;
     private Player player;
     private ThreadController controller;
+    private Generator generator;
     
     public static String userName;
     private JPanel [] rivalsPanels = new JPanel[3];
@@ -64,6 +66,7 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
         botones();
         player = new Player("");
         controller = new ThreadController();
+        generator = new Generator();
         
         jPanel1.setOpaque(false);
         
@@ -332,7 +335,7 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
                 .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(JP_StartLayout.createSequentialGroup()
                         .addComponent(JBtn_invite)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(jButton9)
                         .addGap(18, 18, 18)
                         .addComponent(jButton10))
@@ -623,7 +626,21 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
     }
     
     public void crearFabrica(String tipo){
-        
+        switch (tipo) {
+            case "FunteEnergia":       
+                
+                break;
+            case "Mercado":
+                break;
+            case "Mina":
+                break;
+            case "Armeria":
+                break;
+            case "Templo":
+                break;
+            default:
+                throw new AssertionError();
+        }
     }
     
     public void crearConector(){
