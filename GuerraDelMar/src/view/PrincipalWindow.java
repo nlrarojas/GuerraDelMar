@@ -2,7 +2,7 @@ package view;
 
 import controller.Client;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.IOException;
 import util.IConstants;
 import javax.swing.JOptionPane;
 import java.net.Inet4Address;
@@ -10,6 +10,8 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 import model.Boton;
@@ -60,18 +62,13 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
         
         jPanel1.setOpaque(false);
         
-        timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                myClient = new Client(SERVER_PORT, IP_SERVER_LOCAL, UPDATE_CONVERSATION, null);
-                myClient.start();
-
-                String status = myClient.getStatus();
-                while (status.equals("")) {
-                    status = myClient.getStatus();
-                }
-                jTxtA_Conversation.setText(status);
-            }
+        timer = new Timer(1000, (ActionEvent e) -> {
+            myClient = new Client(SERVER_PORT, ipSelected, UPDATE_CONVERSATION, null);
+            myClient.start();
+            
+            String status;
+            status = myClient.getStatus();
+            jTxtA_Conversation.setText(status);                        
         });
         getIpv4Available();
 
@@ -252,7 +249,7 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
         JP_StartLayout.setHorizontalGroup(
             JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JP_StartLayout.createSequentialGroup()
-                .addContainerGap(43, Short.MAX_VALUE)
+                .addContainerGap(33, Short.MAX_VALUE)
                 .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JP_StartLayout.createSequentialGroup()
@@ -273,26 +270,27 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
                         .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(JP_StartLayout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         JP_StartLayout.setVerticalGroup(
             JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JP_StartLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTabbedPane1)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
@@ -301,11 +299,11 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
                     .addComponent(jButton5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton7)
                     .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton7)
-                        .addComponent(jButton8))
-                    .addComponent(jButton6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                        .addComponent(jButton6)
+                        .addComponent(jButton8)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addGroup(JP_StartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(JBtn_invite)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -439,8 +437,6 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
                 String[] columnNames = {"Nombre de usuario"};
                 String [] userList = myClient.getUserList();
                 String [][] data = new String [userList.length][1];
-                System.out.println(data[0].length);
-                System.out.println(data.length);
                 
                 for (int i = 0; i < userList.length; i++) {
                     data[i][0] = userList[i];
@@ -449,14 +445,14 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
                 DefaultTableModel model = new DefaultTableModel(data, columnNames);
                 JTable_Users.setModel(model);
             }
-            timer.start();
+            //timer.start();
         }
     }//GEN-LAST:event_JBtn_LoginActionPerformed
 
     private boolean validateLogin(){
         if (!Jtf_login.getText().isEmpty()) {    
             userName = Jtf_login.getText();
-            myClient = new Client(SERVER_PORT, IP_SERVER_LOCAL, VALIDATE_USER, userName);
+            myClient = new Client(SERVER_PORT, ipSelected, VALIDATE_USER, userName);
             myClient.start();
             String status = myClient.getStatus();
             while(status.equals("")){
@@ -501,6 +497,7 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
                     JTable_Users.setModel(model);
                 }
             }
+            //timer.start();
         }
     }//GEN-LAST:event_Jtf_loginKeyPressed
 
@@ -514,7 +511,7 @@ public class PrincipalWindow extends javax.swing.JFrame implements IConstants{
         JP_Ipv4Available.setVisible(false);
         JP_Login.setVisible(true);
         
-        myClient = new Client(SERVER_PORT, IP_SERVER_LOCAL);
+        myClient = new Client(SERVER_PORT, ipSelected);
         myClient.start();
     }//GEN-LAST:event_jButton1ActionPerformed
 
